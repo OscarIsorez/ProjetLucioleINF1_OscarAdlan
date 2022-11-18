@@ -13,7 +13,6 @@ public class DemoAleatoire {
 		// RandomGen.rGen.nextInt(int bound) renvoie un entier dans [0 ; bound[
 		System.out.println("nextInt() : " + RandomGen.rGen.nextInt(20));
 		System.out.println("nextInt() : " + RandomGen.rGen.nextInt(20));
-
 	}
 
 }
