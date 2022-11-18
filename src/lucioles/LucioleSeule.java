@@ -41,24 +41,32 @@ public class LucioleSeule {
 
 
 
-
-    /* 
-    Cr´eer une fonction simuleLucioleNbPas qui initialise al´eatoirement une
-luciole, et fait ´evoluer cette luciole un certain nombre de fois (fourni en param`etre), en
-affichant la luciole `a chaque pas de temps, en mode verbeux. En particulier, v´erifier que
-votre luciole ´emet un flash au bon moment, et que son niveau d’´energie revient bien `a 0
-avant d’augmenter `a nouveau. Vous testerez cette fonction dans la fonction main.
- */
     public static void simuleLucioleNbPas(int nbPas)
     {
         double lucioleEnergie =  RandomGen.rGen.nextDouble() * 100;
         for(int i = 0; i < nbPas; i++)
         {
+            lucioleEnergie = incrementeLuciole(lucioleEnergie, RandomGen.rGen.nextDouble() * 1);
             afficheLuciole(lucioleEnergie, true);
-            lucioleEnergie = incrementeLuciole(lucioleEnergie, RandomGen.rGen.nextDouble() * 100 - 50);
+            //on remet à O quand ça atteint 100
+            if(lucioleEnergie > 100) {
+                lucioleEnergie = 0;
+            } 
         }
     }
 
+    public static void simuleLucioleNbFlashs(){
+        double lucioleEnergie =  RandomGen.rGen.nextDouble() * 100;
+        int nbFlashs = 0;
+        while(nbFlashs < 3) {
+            lucioleEnergie = incrementeLuciole(lucioleEnergie, RandomGen.rGen.nextDouble() * 1);
+            afficheLuciole(lucioleEnergie, true);
+            if(lucioleEnergie > 100) {
+                lucioleEnergie = 0;
+                nbFlashs++;
+            } 
+        }
+    }
 
 
 
@@ -75,7 +83,8 @@ avant d’augmenter `a nouveau. Vous testerez cette fonction dans la fonction ma
         // afficheLuciole(lucioleEnergie, true);
         // afficheLuciole(incrementeLuciole(lucioleEnergie, lucioleDeltaEnergie), true);
 
-        simuleLucioleNbPas(10);
+        // simuleLucioleNbPas(1000);
+        simuleLucioleNbFlashs();
         
     }
     
