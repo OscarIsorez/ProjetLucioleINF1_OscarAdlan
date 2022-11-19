@@ -146,7 +146,7 @@ public class Prairie {
 			BitMap.bmpEcritureFichier("img/prairie"+i+".bmp", prairie, population, SEUIL);
 			for(int j = 0; j < population.length; j++){
 				// System.out.println(population[j][ENERGIE]);
-				if (population[j][ENERGIE] > SEUIL) {
+				if (population[j][ENERGIE] >= SEUIL) {
 					population[j][ENERGIE] = 0;
 					
 				}
@@ -173,7 +173,7 @@ public class Prairie {
 		// affichePrairie(prairie, population);
 		// System.out.println();
 		// affichePrairie(prairieLucioles(5, 5, population), population);
-		simulationPrairie(30, 30, 100, 10);
+		// simulationPrairie(30, 30, 100, 10);
 
 		simulationPrairieGIF(30, population, prairie);
 
