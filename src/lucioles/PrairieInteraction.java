@@ -22,7 +22,7 @@ public class PrairieInteraction {
 	public static final int DELTA = 1;
 
 	// Définition de l'apport d'énergie par flash, et du rayon de voisinage
-	public static final double APPORT = 1.0;
+	public static final double APPORT = 20.0;
 	public static final int RAYON = 2;
 
 
@@ -54,6 +54,21 @@ public class PrairieInteraction {
 		}
 		System.out.println();
 	}
+
+	
+	public static void affichePrairie(int[][] prairie, double[][] population){
+		for(int i = 0; i < prairie.length; i++) {
+			for(int j = 0; j < prairie[i].length; j++) {
+				System.out.print(prairie[i][j] + " ");
+			}
+			System.out.println();
+		}
+		System.out.println();
+	}
+	
+
+
+
 	
 	public static int nbLucioles(int[][] prairie) {
 		int nbLucioles = 0;
@@ -69,13 +84,6 @@ public class PrairieInteraction {
 
 	public static int[] voisinageCase(int[][] prairie, int ligne, int colonne, int nbvoisins) {
 		int[] voisins = new int[nbvoisins];
-		if(nbvoisins == 0) {
-			//remplir de -1
-			for(int i = 0; i < voisins.length; i++) {
-				voisins[i] = -1;
-			}
-		}
-		else{
 			int indice_voisins = 0;
 			int i = ligne - RAYON;
 			int j = colonne - RAYON;
@@ -105,7 +113,7 @@ public class PrairieInteraction {
 				}
 			}
 
-		}
+		
 		return voisins;
 	}
 
@@ -130,7 +138,10 @@ public class PrairieInteraction {
 		for(int m = i; m <= k; m++) {
 			for(int n = j; n <= l; n++) {
 				if(prairie[m][n] != -1) {
-					nbVoisins++;
+					//si ce n'est pas lui meme
+					if(m!= ligne || n != colonne) {
+						nbVoisins++;
+					}
 				}
 			}
 		}
@@ -152,38 +163,35 @@ public class PrairieInteraction {
 		return voisins;
 	}
 
-	public static void incrementeLuciole(double[][] population, int[][] voisinage, double[] luciole, int numLuciole) {
+	public static String incrementeLuciole(double[][] population, int[][] voisinage, double[] luciole, int numLuciole) {
 		double[][] copiePopulation = new double[population.length][population[0].length];
 		for(int i = 0; i < population.length; i++) {
 			for(int j = 0; j < population[i].length; j++) {
 				copiePopulation[i][j] = population[i][j];
-
+				
 			}
 		}
+		luciole[ENERGIE] += luciole[DELTA];
 
-		//peut etre la le probleme
-		for(int i = 0; i < voisinage[numLuciole].length; i++) {
-			copiePopulation[voisinage[numLuciole][i]][0] += APPORT;
+		if (copiePopulation[numLuciole][ENERGIE] >= SEUIL) {
+			copiePopulation[numLuciole][ENERGIE] = 0;
+			for(int i = 0; i < voisinage[numLuciole].length; i++) {
+
+					//trouver les bons arguments pour la fonction
+					return incrementeLuciole(copiePopulation, voisinage, copiePopulation[voisinage[numLuciole][i]], voisinage[numLuciole][i]);
+				}
+				
 		}
-		//peut etre la le probleme
+	
 		//on remet a jour le tableau population
 		for(int i = 0; i < population.length; i++) {
 			for(int j = 0; j < population[i].length; j++) {
 				population[i][j] = copiePopulation[i][j];
 			}
 		}
+		return "";
 	}
 
-	public static void affichePrairie(int[][] prairie, double[][] population){
-		for(int i = 0; i < prairie.length; i++) {
-			for(int j = 0; j < prairie[i].length; j++) {
-				System.out.print(prairie[i][j] + " ");
-			}
-			System.out.println();
-		}
-		System.out.println();
-	}
-	
 	public static void simulationPrairieGIF(int nbpas, double[][] population, int[][] prairie){
 		String[] fichierGIF = new String[nbpas];
 		for(int i = 0; i<nbpas; i++){
@@ -191,12 +199,12 @@ public class PrairieInteraction {
 			BitMap.bmpEcritureFichier("img/prairieInteraction"+i+".bmp", prairie, population, SEUIL);
 			for(int j = 0; j < population.length; j++){
 				// System.out.println(population[j][ENERGIE]);
-				if (population[j][ENERGIE] >= SEUIL) {
-					population[j][ENERGIE] = 0;
-				}
+				// if (population[j][ENERGIE] >= SEUIL) {
+				// 	population[j][ENERGIE] = 0;
+				// }
+				incrementeLuciole( population, voisinage(prairie), population[j], j);
 
 				//peut etre la le probleme 
-				incrementeLuciole( population, voisinage(prairie), population[j], j);
 			}
 		}
 		GifCreator.construitGIF("simu/prairie_lucioles_interaction.gif", fichierGIF);;
