@@ -22,7 +22,7 @@ public class PrairieInteraction {
 	public static final int DELTA = 1;
 
 	// Définition de l'apport d'énergie par flash, et du rayon de voisinage
-	public static final double APPORT = 20.0;
+	public static final double APPORT = 15;
 	public static final int RAYON = 2;
 
 
@@ -163,33 +163,85 @@ public class PrairieInteraction {
 		return voisins;
 	}
 
-	public static String incrementeLuciole(double[][] population, int[][] voisinage, double[] luciole, int numLuciole) {
-		double[][] copiePopulation = new double[population.length][population[0].length];
+	public static void  incrementeLuciole(double[][] population, int[][] voisinage, double[] luciole, int numLuciole) {
+		
+		//creation de copiepopulations
+		double[][] copiePopulations = new double[population.length][population[0].length];
 		for(int i = 0; i < population.length; i++) {
 			for(int j = 0; j < population[i].length; j++) {
-				copiePopulation[i][j] = population[i][j];
-				
+				copiePopulations[i][j] = population[i][j];
 			}
 		}
-		luciole[ENERGIE] += luciole[DELTA];
+		
+		//on cacule l'incrementation au pas suivant
+		
 
-		if (copiePopulation[numLuciole][ENERGIE] >= SEUIL) {
-			copiePopulation[numLuciole][ENERGIE] = 0;
+		// for(int i = 0; i < voisinage[numLuciole].length; i++) {
+		// 	//si une viosine a une energie sup a 100
+		// 	if( population[voisinage[numLuciole][i]][ENERGIE] > 100) {
+		// 		//affichage debug
+		// 		System.out.println("Luciole " + numLuciole + " voit une luciole " + voisinage[numLuciole][i] + " avec une energie de " + population[voisinage[numLuciole][i]][ENERGIE]);
+				
+		// 		//on lui ajoute apport
+		// 		luciole[ENERGIE] += APPORT;
+		// 		//on remet la voisine a 0
+		// 		population[voisinage[numLuciole][i]][ENERGIE] = 0;
+		// 	}
+			
+		//si la luciole a une energie sup à seuil alors toutes ses voisines ont un apport
+		
+		
+		//si la luciole du pas d'avant est a 100 alors sur le pas les voisines ont un apport et si elles sont sup à 100 elles sont remises à 0 juste avant
+		
+		double[] copieLuciole = new double[luciole.length];
+		for(int i = 0; i<population.length; i++){
+			if(population[i] == luciole){
+				copieLuciole = population[i];
+
+			}
+		}
+		
+		copieLuciole[ENERGIE] += copieLuciole[DELTA];
+		if(copieLuciole[ENERGIE] > SEUIL) {
 			for(int i = 0; i < voisinage[numLuciole].length; i++) {
+				//on lui ajoute apport
 
-					//trouver les bons arguments pour la fonction
-					return incrementeLuciole(copiePopulation, voisinage, copiePopulation[voisinage[numLuciole][i]], voisinage[numLuciole][i]);
+				//on lui apporte sur le meme pas c'est ça le probleme
+				copiePopulations[voisinage[numLuciole][i]][ENERGIE] += APPORT;
+				
+				//si l'energie de la voisine est sup à 100
+				if(copiePopulations[voisinage[numLuciole][i]][ENERGIE] > SEUIL) {
+					copiePopulations[voisinage[numLuciole][i]][ENERGIE] = 0;
 				}
 				
-		}
-	
-		//on remet a jour le tableau population
+			}
+
+		//on remet copiePopulations dans population
 		for(int i = 0; i < population.length; i++) {
 			for(int j = 0; j < population[i].length; j++) {
-				population[i][j] = copiePopulation[i][j];
+				population[i][j] = copiePopulations[i][j];
 			}
 		}
-		return "";
+		}
+
+		// luciole[ENERGIE] += luciole[DELTA];
+		// for(int i = 0; i < voisinage[numLuciole].length; i++) {
+		// 	int numVoisin = voisinage[numLuciole][i];
+		// 	double[] voisin = population[numVoisin];
+		// 	if(voisin[ENERGIE] > luciole[ENERGIE]) {
+		// 		luciole[ENERGIE] += voisin[DELTA];
+		// 		voisin[ENERGIE] -= voisin[DELTA];
+		// 	}
+		/* 
+		 * on incremente la luciole
+		 * si une de ses voisines a une energie superieure a 100
+		 * on lui ajoute apport 
+		 * on remet la voisine a 0
+		 * si energie luciole sup à 100 on la remet elle aussi a 0 
+		 */
+
+
+		
 	}
 
 	public static void simulationPrairieGIF(int nbpas, double[][] population, int[][] prairie){
@@ -199,38 +251,58 @@ public class PrairieInteraction {
 			BitMap.bmpEcritureFichier("img/prairieInteraction"+i+".bmp", prairie, population, SEUIL);
 			for(int j = 0; j < population.length; j++){
 				// System.out.println(population[j][ENERGIE]);
-				// if (population[j][ENERGIE] >= SEUIL) {
-				// 	population[j][ENERGIE] = 0;
-				// }
+				if (population[j][ENERGIE] >= SEUIL) {
+					population[j][ENERGIE] = 0;
+				}
+				
 				incrementeLuciole( population, voisinage(prairie), population[j], j);
-
 				//peut etre la le probleme 
 			}
 		}
 		GifCreator.construitGIF("simu/prairie_lucioles_interaction.gif", fichierGIF);;
 	}
-
+	
+	
+	
 	public static void main(String[] args) {
 		//on utilise les fonctions du fichier Prairie.java 
 
 		//on crée une prairie de 10 lignes et 10 colonnes
 		
-		double[][] population = creerPopulation(100);
-		int[][] prairie = prairieLucioles(50, 50, population);
+			//petite population
+
+
+			// double[][] population =creerPopulation(8);
+			// int[][] prairie = prairieLucioles(3, 3, population);
+		
+			//grande population
+
+
+			double[][] population =creerPopulation(890);
+			int[][] prairie = prairieLucioles(30, 30, population);
+
+
+
 
 		//on affiche la prairie
-		affichePrairie(prairie, population);
-		System.out.println();
+
+
+		// affichePrairie(prairie, population);
+		// System.out.println();
 
 		
 		//affiche le nombre de voisins et le voisinage de la luciole en position (0,0)
+
+
 		// System.out.println(nbVoisins(prairie, 0, 0));
 		// afficheTab(voisinageCase(prairie, 0,0,nbVoisins(prairie, 0,0)));
-		System.out.println();
+		// System.out.println();
 
 		//affiche le tableau des voisins de chaque luciole	
-		afficheMatrice(voisinage(prairie));
-		System.out.println();
+
+
+		// afficheMatrice(voisinage(prairie));
+		// System.out.println();
 
 		simulationPrairieGIF(80, population, prairie);
 		
