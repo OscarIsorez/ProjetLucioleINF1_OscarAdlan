@@ -35,7 +35,7 @@ public class Prairie {
 	public static double[] creerLuciole(){
 		double[] luciole = new double[2];
 		luciole[ENERGIE] =  RandomGen.rGen.nextDouble() * 100;
-		luciole[DELTA] =  RandomGen.rGen.nextDouble() * 10;
+		luciole[DELTA] =  RandomGen.rGen.nextDouble() * 1;
 		return luciole;
 	}
 
