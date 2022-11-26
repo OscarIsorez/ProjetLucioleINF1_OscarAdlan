@@ -1,6 +1,8 @@
 package lucioles;
 
 
+//import round de math
+import java.lang.Math;
 //import de la fonction creerPopulation de Prairie.java
 import static lucioles.Prairie.creerPopulation;
 import static lucioles.Prairie.prairieLucioles;
@@ -22,7 +24,7 @@ public class PrairieInteraction {
 	public static final int DELTA = 1;
 
 	// Définition de l'apport d'énergie par flash, et du rayon de voisinage
-	public static final double APPORT = 10.0;
+	public static final double APPORT = 5.0;
 	public static final int RAYON = 2;
 
 
@@ -165,12 +167,13 @@ public class PrairieInteraction {
 
 	public static void  incrementeLuciole(double[][] copiePopulation, int[][] voisinage, double[] luciole, int numLuciole) {
 		
-		double increment = -1;
+		double increment = APPORT;
 
 		for(int i = 0; i < voisinage[numLuciole].length; i++) {
 			if(copiePopulation[voisinage[numLuciole][i]][ENERGIE] >= SEUIL) {
 				
-				increment = APPORT;
+				increment = luciole[DELTA] +APPORT;
+				break;
 			}
 			else {
 				increment = luciole[DELTA];
@@ -204,9 +207,8 @@ public class PrairieInteraction {
 				incrementeLuciole(copiePopulation, voisines, population[j], j);
 			}
 			for(int p = 0; p < population.length; p++) {
-				
-			
-				System.out.print("Ene " + p + " : " + population[p][ENERGIE] + "---");
+				// System.out.print("Ene " + Math.round(p) + " : " + Math.round(population[p][ENERGIE]) + "  ---  ");
+				System.out.print("Ene " + p + " : " + population[p][ENERGIE] + "  ---  ");
 			}
 			System.out.println();
 			
@@ -229,28 +231,26 @@ public class PrairieInteraction {
 	
 	
 	public static void main(String[] args) {
+		//version de test 
+		// double[][] population =creerPopulation(8);
+		// int[][] prairie = prairieLucioles(6, 6, population);
+		// simulationPrairieGIF(200, population, prairie);
+
+		double[][] populationExemple = {{96, 1},{98, 1},{98, 1},{97, 1},{97, 1},{96, 1},{96, 1},{12, 1},{12, 1},{5, 1}};
+		int[][] prairieExemple = {{-1,-1,-1,-1,-1,-1,-1,-1},
+								{-1,-1,-1,-1,-1,-1,-1,0},	
+								{-1,-1,-1,1,-1,2,-1,-1},
+								{-1,-1,-1,3,-1,-1,-1,-1},
+								{-1,-1,-1,-1,4,-1,-1,-1},
+								{-1,-1,-1,-1,5,-1,6,-1},
+								{-1,-1,7,8,-1,-1,-1,-1},
+								{-1,-1,-1,-1,-1,9,-1,-1},};
+
+		// double[][] population =creerPopulation(1000);
+		// int[][] prairie = prairieLucioles(40, 40, population);
 		
-		double[][] population =creerPopulation(200);
-		int[][] prairie = prairieLucioles(20, 20, population);
-		
-		simulationPrairieGIF(80, population, prairie);
-		//on utilise les fonctions du fichier Prairie.java 
-
-		//on crée une prairie de 10 lignes et 10 colonnes
-		
-			//petite population
-
-
-			// double[][] population =creerPopulation(8);
-			// int[][] prairie = prairieLucioles(3, 3, population);
-		
-			//grande population
-
-
-
+		simulationPrairieGIF(300, populationExemple, prairieExemple);
 		//on affiche la prairie
-
-
 		// affichePrairie(prairie, population);
 		// System.out.println();
 
