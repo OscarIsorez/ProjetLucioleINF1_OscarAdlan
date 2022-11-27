@@ -167,19 +167,21 @@ public class PrairieInteraction {
 
 	public static void  incrementeLuciole(double[][] copiePopulation, int[][] voisinage, double[] luciole, int numLuciole) {
 		
-		double increment = APPORT;
+		double increment = 0;
 
 		for(int i = 0; i < voisinage[numLuciole].length; i++) {
 			if(copiePopulation[voisinage[numLuciole][i]][ENERGIE] >= SEUIL) {
+				increment += APPORT;
 				
-				increment = luciole[DELTA] +APPORT;
-				break;
-			}
-			else {
-				increment = luciole[DELTA];
-			}
+			}	
 		}
+		// if (increment == 0) {
+		// 	increment = luciole[DELTA];
+		// }
 		luciole[ENERGIE] += increment;
+		if(copiePopulation[numLuciole][ENERGIE] < SEUIL){
+			luciole[ENERGIE] += luciole[DELTA];
+		}
 		
 	}
 	
@@ -246,10 +248,10 @@ public class PrairieInteraction {
 								{-1,-1,7,8,-1,-1,-1,-1},
 								{-1,-1,-1,-1,-1,9,-1,-1},};
 
-		// double[][] population =creerPopulation(1000);
-		// int[][] prairie = prairieLucioles(40, 40, population);
+		double[][] population =creerPopulation(1000);
+		int[][] prairie = prairieLucioles(40, 40, population);
 		
-		simulationPrairieGIF(300, populationExemple, prairieExemple);
+		simulationPrairieGIF(300, population, prairie);
 		//on affiche la prairie
 		// affichePrairie(prairie, population);
 		// System.out.println();
