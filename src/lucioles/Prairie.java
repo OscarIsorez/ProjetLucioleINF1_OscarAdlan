@@ -126,11 +126,10 @@ public class Prairie {
 			affichePrairie(prairie, population);
 			System.out.println();
 			for(int j = 0; j < population.length; j++) {
-				population[j] = incrementeLuciole(population[j]);
 				if (population[j][ENERGIE] > SEUIL) {
 					population[j][ENERGIE] = 0;
-
 				}
+				population[j] = incrementeLuciole(population[j]);
 			}
 		}
 	}
@@ -148,7 +147,6 @@ public class Prairie {
 				// System.out.println(population[j][ENERGIE]);
 				if (population[j][ENERGIE] >= SEUIL) {
 					population[j][ENERGIE] = 0;
-					
 				}
 				population[j] = incrementeLuciole(population[j]);
 			}
