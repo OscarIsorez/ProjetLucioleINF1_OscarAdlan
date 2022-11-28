@@ -16,7 +16,6 @@ public class Prairie {
 
 	// Affiche une luciole
 	public static void afficheLuciole(double[] luciole){
-
 		for(int i = 0; i < luciole.length; i++) {
 			System.out.print(luciole[i] + " ");
 		}
@@ -26,9 +25,6 @@ public class Prairie {
 	public static void affichePopulation(double[][] population) {
 		for(int i = 0; i < population.length; i++) {
 			afficheLuciole(population[i]);
-
-			//test pour savoir si elles ont bien des adresses differentes
-			// System.out.print(" " + population[i]);
 			System.out.println();
 		}
 	}
@@ -41,7 +37,6 @@ public class Prairie {
 
 	public static double[] incrementeLuciole(double[] luciole){
 		luciole[ENERGIE] += luciole[DELTA];
-
 		return luciole;
 	}
 
@@ -49,7 +44,6 @@ public class Prairie {
 		double[][] population = new double[nbLucioles][2];
 		for(int i = 0; i < nbLucioles; i++) {
 			population[i] = creerLuciole();
-			
 		}
 		return population;
 	} 
@@ -119,14 +113,12 @@ public class Prairie {
 		return prairie;
 	}
 
-	public static void simulationPrairie(int nbLigne, int nbColonne, int nbLucioles, int nbPas) {
-		double[][] population = creerPopulation(nbLucioles);
-		int[][] prairie = prairieLucioles(nbLigne, nbColonne, population);
+	public static void simulationPrairie( int nbPas,double[][] population, int[][] prairie) {
 		for(int i = 0; i < nbPas; i++) {
 			affichePrairie(prairie, population);
 			System.out.println();
 			for(int j = 0; j < population.length; j++) {
-				if (population[j][ENERGIE] > SEUIL) {
+				if (population[j][ENERGIE] > 100) {
 					population[j][ENERGIE] = 0;
 				}
 				population[j] = incrementeLuciole(population[j]);
@@ -136,44 +128,28 @@ public class Prairie {
 
 	public static void simulationPrairieGIF(int nbpas, double[][] population, int[][] prairie){
 
-
 		String[] fichierGIF = new String[nbpas];
-		
-		
 		for(int i = 0; i<nbpas; i++){
 			fichierGIF[i] = "img/prairie" + i + ".bmp";
 			BitMap.bmpEcritureFichier("img/prairie"+i+".bmp", prairie, population, SEUIL);
 			for(int j = 0; j < population.length; j++){
-				// System.out.println(population[j][ENERGIE]);
-				if (population[j][ENERGIE] >= SEUIL) {
+				if (population[j][ENERGIE] >= 100) {
 					population[j][ENERGIE] = 0;
 				}
 				population[j] = incrementeLuciole(population[j]);
 			}
 		}
-
-
-		GifCreator.construitGIF("simu/prairie_lucioles.gif", fichierGIF);;
-		
-		
+		GifCreator.construitGIF("simu/prairie_lucioles.gif", fichierGIF);
 	}
 
 
 	public static void main(String[] args) {
-		// System.out.println(creerLuciole()[0]);
-		// afficheLuciole(creerLuciole());
-		// System.out.println();
-		// affichePopulation(creerPopulation(5));
-
-
+	
 		double[][] population = creerPopulation(100);
 		int[][] prairie = prairieLucioles(50, 50, population);
-		// affichePrairie(prairie, population);
-		// System.out.println();
-		// affichePrairie(prairieLucioles(5, 5, population), population);
-		// simulationPrairie(30, 30, 100, 10);
 
-		simulationPrairieGIF(30, population, prairie);
+		// simulationPrairie(10,population, prairie);
+		// simulationPrairieGIF(30, population, prairie);
 
 
 
