@@ -35,8 +35,15 @@ public class LucioleSeule {
 
     public static double incrementeLuciole(double niveauEnergie, double deltaEnergie)
     {
-        niveauEnergie += deltaEnergie;
-        return niveauEnergie;
+        if (niveauEnergie < SEUIL)
+        {
+            niveauEnergie +=deltaEnergie;
+            return niveauEnergie;
+        }
+        else
+        {
+            return niveauEnergie;
+        }
     }
 
 
@@ -81,9 +88,11 @@ public class LucioleSeule {
         
         // System.out.println("DeltaEnergie: " + lucioleDeltaEnergie);
         // afficheLuciole(lucioleEnergie, true);
-        // afficheLuciole(incrementeLuciole(lucioleEnergie, lucioleDeltaEnergie), true);
-
-        // simuleLucioleNbPas(1000);
+        System.out.println("---------------afficheLuciole()-------------");
+        afficheLuciole(incrementeLuciole(lucioleEnergie, lucioleDeltaEnergie), true);
+        System.out.println("---------------simuleLucioleNbPas()-------------");
+        simuleLucioleNbPas(10);
+        System.out.println("--------------simuleLucioleNbFlashs()--------------");
         simuleLucioleNbFlashs();
         
     }
